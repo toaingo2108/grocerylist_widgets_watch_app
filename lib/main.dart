@@ -1,7 +1,100 @@
 import 'package:flutter/material.dart';
+import 'package:grocery_list/list.dart';
+import 'package:home_widget/home_widget.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  // Set AppGroup Id. This is needed for iOS Apps to talk to their WidgetExtensions
+  await HomeWidget.setAppGroupId('group.jack.grocerylist.groceryList');
+  // Register an Interactivity Callback. It is necessary that this method is static and public
+  await HomeWidget.registerInteractivityCallback(interactiveCallback);
   runApp(const MyApp());
+}
+
+@pragma('vm:entry-point')
+Future<void> interactiveCallback(Uri? uri) async {
+  // Set AppGroup Id. This is needed for iOS Apps to talk to their WidgetExtensions
+  await HomeWidget.setAppGroupId('group.jack.grocerylist.groceryList');
+
+  // We check the host of the uri to determine which action should be triggered.
+  if (uri?.host == 'increment') {
+    await _increment();
+  } else if (uri?.host == 'clear') {
+    await _clear();
+  } else if (uri?.host == 'next_page') {
+    await _nextPage();
+  } else if (uri?.host == 'prev_page') {
+    await _prevPage();
+  }
+}
+
+const _countKey = 'counter';
+const _pageKey = 'page';
+
+/// Gets the currently stored Value
+Future<int> get _value async {
+  final value = await HomeWidget.getWidgetData<int>(_countKey, defaultValue: 0);
+  return value!;
+}
+
+Future<int> get _page async {
+  final value = await HomeWidget.getWidgetData<int>(_pageKey, defaultValue: 0);
+  return value!;
+}
+
+/// Retrieves the current stored value
+/// Increments it by one
+/// Saves that new value
+/// @returns the new saved value
+Future<int> _increment() async {
+  final oldValue = await _value;
+  final newValue = oldValue + 1;
+  await _sendAndUpdate(newValue);
+  print('increase number');
+  return newValue;
+}
+
+Future<int> _nextPage() async {
+  await _sendAndUpdatePage(1);
+  return 1;
+}
+
+Future<int> _prevPage() async {
+  await _sendAndUpdatePage(0);
+  return 0;
+}
+
+/// Clears the saved Counter Value
+Future<void> _clear() async {
+  await _sendAndUpdate(null);
+}
+
+/// Stores [value] in the Widget Configuration
+Future<void> _sendAndUpdate([int? value]) async {
+  await HomeWidget.saveWidgetData(_countKey, value);
+  await HomeWidget.renderFlutterWidget(
+    ListWidget(count: value ?? 0),
+    key: 'dash_counter',
+    logicalSize: const Size(100, 100),
+  );
+  await HomeWidget.updateWidget(
+    iOSName: 'CounterWidget',
+    androidName: 'CounterWidgetProvider',
+  );
+}
+
+Future<void> _sendAndUpdatePage([int? value]) async {
+  await HomeWidget.saveWidgetData(_pageKey, value);
+  var signValue = await _value;
+  await HomeWidget.renderFlutterWidget(
+    ListWidget(count: signValue ?? 0),
+    key: 'dash_counter',
+    logicalSize: const Size(100, 100),
+  );
+  await HomeWidget.updateWidget(
+    iOSName: 'CounterWidget',
+    androidName: 'CounterWidgetProvider',
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -11,27 +104,12 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Grocery List',
       theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // TRY THIS: Try running your application with "flutter run". You'll see
-        // the application has a purple toolbar. Then, without quitting the app,
-        // try changing the seedColor in the colorScheme below to Colors.green
-        // and then invoke "hot reload" (save your changes or press the "hot
-        // reload" button in a Flutter-supported IDE, or press "r" if you used
-        // the command line to start the app).
-        //
-        // Notice that the counter didn't reset back to zero; the application
-        // state is not lost during the reload. To reset the state, use hot
-        // restart instead.
-        //
-        // This works for code too, not just values: Most code changes can be
-        // tested with just a hot reload.
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      home: const MyHomePage(title: 'Grocery List'),
     );
   }
 }
