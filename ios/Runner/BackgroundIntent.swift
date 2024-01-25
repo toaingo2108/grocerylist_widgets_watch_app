@@ -10,23 +10,38 @@ import Foundation
 import home_widget
 
 @available(iOS 17, *)
-public struct BackgroundIntent: AppIntent {
+enum WidgetMethod: String, AppEnum {
+    case increment
+    case toggle
+
+    static var typeDisplayRepresentation = TypeDisplayRepresentation(name: "increment")
+
+    static let caseDisplayRepresentations: [Self: DisplayRepresentation] = [
+        .increment: .init(title: "Increment"),
+        .toggle: .init(title: "Toggle")
+    ]
+}
+
+@available(iOS 17, *)
+public struct BackgroundIntent: WidgetConfigurationIntent {
+
   static public var title: LocalizedStringResource = "Increment Counter"
 
-  @Parameter(title: "Method")
-  var method: String
+    @Parameter(title: "Method", default: WidgetMethod.increment)
+    var method: WidgetMethod
 
   public init() {
-    method = "increment"
+      method = .increment
   }
 
-  public init(method: String) {
+   init(method: WidgetMethod) {
     self.method = method
   }
 
   public func perform() async throws -> some IntentResult {
+      print(method.localizedStringResource.key)
     await HomeWidgetBackgroundWorker.run(
-      url: URL(string: "groceryList://\(method)"),
+        url: URL(string: "groceryList://\(method.localizedStringResource.key)"),
       appGroup: "group.jack.grocerylist.groceryList")
 
     return .result()
