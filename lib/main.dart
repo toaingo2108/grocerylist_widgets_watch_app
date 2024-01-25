@@ -17,9 +17,9 @@ Future<void> interactiveCallback(Uri? uri) async {
   await HomeWidget.setAppGroupId('group.jack.grocerylist.groceryList');
 
   // We check the host of the uri to determine which action should be triggered.
-  if (uri?.host == 'Increment') {
+  if (uri?.host == 'increment') {
     await _increment();
-  } else if (uri?.host == 'Toggle') {
+  } else if (uri?.host == 'toggle') {
     await _clear();
   } else if (uri?.host == 'next_page') {
     await _nextPage();

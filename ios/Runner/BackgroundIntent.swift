@@ -40,10 +40,17 @@ public struct BackgroundIntent: WidgetConfigurationIntent {
 
   public func perform() async throws -> some IntentResult {
       print(method.localizedStringResource.key)
-    await HomeWidgetBackgroundWorker.run(
-        url: URL(string: "groceryList://\(method.localizedStringResource.key)"),
-      appGroup: "group.jack.grocerylist.groceryList")
-
+      
+      if method == .increment {
+          await HomeWidgetBackgroundWorker.run(
+            url: URL(string: "groceryList://increment"),
+            appGroup: "group.jack.grocerylist.groceryList")
+      }
+      else {
+          await HomeWidgetBackgroundWorker.run(
+            url: URL(string: "groceryList://toggle"),
+            appGroup: "group.jack.grocerylist.groceryList")
+      }
     return .result()
   }
 }
