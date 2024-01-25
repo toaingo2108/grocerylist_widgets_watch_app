@@ -1,4 +1,4 @@
-package com.jack.grocerylist.grocery_list
+package jack.grocery_list.grocery_list
 
 import io.flutter.embedding.android.FlutterActivity
 

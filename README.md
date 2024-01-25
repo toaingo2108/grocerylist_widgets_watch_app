@@ -1,6 +1,6 @@
 # grocery_list
 
-Grocery List Home Widget and Watch
+A new Flutter project.
 
 ## Getting Started
 

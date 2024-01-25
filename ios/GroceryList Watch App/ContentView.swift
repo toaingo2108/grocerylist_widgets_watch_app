@@ -1,6 +1,6 @@
 //
 //  ContentView.swift
-//  ShoppingListWatch Watch App
+//  GroceryList Watch App
 //
 //  Created by Mobile World on 1/24/24.
 //
