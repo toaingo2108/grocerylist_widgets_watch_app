@@ -116,16 +116,12 @@
 		97C146FD1CF9000F007C117D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		97C147001CF9000F007C117D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		97C147021CF9000F007C117D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		AFE41DBA7358EAD5D51C6434 /* Pods-GroceryList Watch App.profile.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GroceryList Watch App.profile.xcconfig"; path = "Target Support Files/Pods-GroceryList Watch App/Pods-GroceryList Watch App.profile.xcconfig"; sourceTree = "<group>"; };
-		BD7312C4A450E1E3D8069002 /* Pods-GroceryList Watch App.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GroceryList Watch App.release.xcconfig"; path = "Target Support Files/Pods-GroceryList Watch App/Pods-GroceryList Watch App.release.xcconfig"; sourceTree = "<group>"; };
 		C65D2262CCED6FBFECB10955 /* Pods-RunnerTests.profile.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RunnerTests.profile.xcconfig"; path = "Target Support Files/Pods-RunnerTests/Pods-RunnerTests.profile.xcconfig"; sourceTree = "<group>"; };
-		EE96F2AD0F68CE14EC67520F /* Pods-GroceryList Watch App.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GroceryList Watch App.debug.xcconfig"; path = "Target Support Files/Pods-GroceryList Watch App/Pods-GroceryList Watch App.debug.xcconfig"; sourceTree = "<group>"; };
 		F43F1AB090C43492B58F64CB /* Pods_GroceryListExtension.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_GroceryListExtension.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		FB3C4FB82BE4BBA7143DA3E4 /* Pods-GroceryListExtension.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GroceryListExtension.release.xcconfig"; path = "Target Support Files/Pods-GroceryListExtension/Pods-GroceryListExtension.release.xcconfig"; sourceTree = "<group>"; };
 		FC040D3A2B61F023005FA555 /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
 		FC040D3C2B61F023005FA555 /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
 		FC040D522B61F0B7005FA555 /* Runner.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Runner.entitlements; sourceTree = "<group>"; };
-		FC040D532B61F0EF005FA555 /* GroceryListWidgetExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = GroceryListWidgetExtension.entitlements; sourceTree = "<group>"; };
 		FC040D562B6203E8005FA555 /* BackgroundIntent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackgroundIntent.swift; sourceTree = "<group>"; };
 		FC040D602B6208E6005FA555 /* GroceryListExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = GroceryListExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		FC040D642B6208E6005FA555 /* GroceryListBundle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroceryListBundle.swift; sourceTree = "<group>"; };
@@ -137,6 +133,7 @@
 		FC040D932B62AA09005FA555 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		FC040D952B62AA0B005FA555 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		FC040D982B62AA0B005FA555 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		FC040DA12B62AD97005FA555 /* GroceryListExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = GroceryListExtension.entitlements; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -179,9 +176,6 @@
 		032E2CEE0BB188C50B1AA70E /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				EE96F2AD0F68CE14EC67520F /* Pods-GroceryList Watch App.debug.xcconfig */,
-				BD7312C4A450E1E3D8069002 /* Pods-GroceryList Watch App.release.xcconfig */,
-				AFE41DBA7358EAD5D51C6434 /* Pods-GroceryList Watch App.profile.xcconfig */,
 				6E10CC90318012F83AA70481 /* Pods-GroceryListExtension.debug.xcconfig */,
 				FB3C4FB82BE4BBA7143DA3E4 /* Pods-GroceryListExtension.release.xcconfig */,
 				57D1560DE546C2184F150F05 /* Pods-GroceryListExtension.profile.xcconfig */,
@@ -217,7 +211,7 @@
 		97C146E51CF9000F007C117D = {
 			isa = PBXGroup;
 			children = (
-				FC040D532B61F0EF005FA555 /* GroceryListWidgetExtension.entitlements */,
+				FC040DA12B62AD97005FA555 /* GroceryListExtension.entitlements */,
 				9740EEB11CF90186004384FC /* Flutter */,
 				97C146F01CF9000F007C117D /* Runner */,
 				FC040D632B6208E6005FA555 /* GroceryList */,
@@ -956,6 +950,7 @@
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_ENTITLEMENTS = GroceryListExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = "";
@@ -999,6 +994,7 @@
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_ENTITLEMENTS = GroceryListExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = "";
@@ -1039,6 +1035,7 @@
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_ENTITLEMENTS = GroceryListExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = "";

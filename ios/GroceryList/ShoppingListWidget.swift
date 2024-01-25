@@ -15,7 +15,7 @@ struct ShoppingListProvider: TimelineProvider {
 
   func getSnapshot(in context: Context, completion: @escaping (ShoppingListEntry) -> Void) {
     // Get the UserDefaults for the AppGroup
-    let prefs = UserDefaults(suiteName: "group.es.antonborri.homeWidgetCounter")
+    let prefs = UserDefaults(suiteName: "group.jack.grocerylist.groceryList")
     // Load the current Count
     let entry = ShoppingListEntry(date: Date(), count: prefs?.integer(forKey: "counter") ?? 0, page: prefs?.integer(forKey: "page") ?? 0)
     completion(entry)
@@ -44,7 +44,7 @@ struct ShoppingListViewEntryView: View {
     if family == .accessoryCircular {
       Image(
         uiImage: UIImage(
-          contentsOfFile: UserDefaults(suiteName: "group.es.antonborri.homeWidgetCounter")?.string(
+          contentsOfFile: UserDefaults(suiteName: "group.jack.grocerylist.groceryList")?.string(
             forKey: "dash_counter") ?? "")!
       ).resizable()
         .frame(width: 76, height: 76)
