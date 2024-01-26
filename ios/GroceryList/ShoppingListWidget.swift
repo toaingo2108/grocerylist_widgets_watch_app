@@ -10,11 +10,19 @@ import WidgetKit
 import AppIntents
 
 struct ShoppingListProvider: TimelineProvider {
+    
+    static let defaultDataString = """
+{
+  "My Shopping List": [],
+  "Walmart": [],
+  "Kroger": [],
+}
+"""
     func snapshot(for configuration: BackgroundIntent, in context: Context) async -> ShoppingListEntry {
         let prefs = UserDefaults(suiteName: "group.jack.grocerylist.groceryList")
         // Load the current Count
-        let entry = ShoppingListEntry(date: Date(), count: prefs?.integer(forKey: "counter") ?? 0, shoppingListStr: prefs?.string(forKey: "list") ?? "[]", method: configuration.method)
-        
+        let entry = ShoppingListEntry(date: Date(), shoppingListStr: prefs?.string(forKey: "list") ?? ShoppingListProvider.defaultDataString, method: configuration.method)
+                
         return entry
     }
     
@@ -25,14 +33,15 @@ struct ShoppingListProvider: TimelineProvider {
     }
     
   func placeholder(in context: Context) -> ShoppingListEntry {
-      ShoppingListEntry(date: Date(), count: 0, shoppingListStr: "[]", method: .increment)
+      ShoppingListEntry(date: Date(), shoppingListStr: ShoppingListProvider.defaultDataString, method: .increment)
   }
 
   func getSnapshot(in context: Context, completion: @escaping (ShoppingListEntry) -> Void) {
     // Get the UserDefaults for the AppGroup
     let prefs = UserDefaults(suiteName: "group.jack.grocerylist.groceryList")
     // Load the current Count
-      let entry = ShoppingListEntry(date: Date(), count: prefs?.integer(forKey: "counter") ?? 0, shoppingListStr: prefs?.string(forKey: "list") ?? "[]", method: WidgetMethod(rawValue: prefs?.string(forKey: "method") ?? "increment") ?? .increment)
+      let entry = ShoppingListEntry(date: Date(), shoppingListStr: prefs?.string(forKey: "list") ?? "[]", method: WidgetMethod(rawValue: prefs?.string(forKey: "method") ?? "increment") ?? .increment)
+      
     completion(entry)
   }
 
@@ -46,7 +55,6 @@ struct ShoppingListProvider: TimelineProvider {
 
 struct ShoppingListEntry: TimelineEntry {
     let date: Date
-    let count: Int
     let shoppingListStr: String
     let method: WidgetMethod
 }
@@ -55,7 +63,7 @@ struct ShoppingItem: Identifiable {
     let id = UUID()
     let color: Color
     let title: String
-    let count: Int
+    var count: Int
     
     // Computed property to get the initials for the icon
     var initials: String {
@@ -74,11 +82,42 @@ struct ShoppingListViewEntryView: View {
 
   @Environment(\.widgetFamily) var family
 
-    let items: [ShoppingItem] = [
-        ShoppingItem(color: .yellow, title: "My Shopping List", count: 7),
-        ShoppingItem(color: .orange, title: "Walmart", count: 10),
-        ShoppingItem(color: .blue, title: "Kroger", count: 7)
+    var items: [ShoppingItem] = [
+        ShoppingItem(color: .yellow, title: "My Shopping List", count: 0),
+        ShoppingItem(color: .orange, title: "Walmart", count: 0),
+        ShoppingItem(color: .blue, title: "Kroger", count: 0)
     ]
+    
+    init(entry: ShoppingListProvider.Entry) {
+        self.entry = entry
+                
+        if let jsonData = entry.shoppingListStr.data(using: .utf8) {
+            do {
+                if let shoppingList = try JSONSerialization.jsonObject(with: jsonData, options: []) as? [String: Any] {
+                    for index in items.indices {
+                        let shop = items[index]
+                        let categories = shoppingList[shop.title] as? [[String:Any]]
+                        var count = 0
+                        for category in categories ?? [] {
+                            let detailItems = category["items"] as? [[String:Any]]
+                            for item in detailItems ?? [] {
+                                if item["isChecked"] as? Bool ?? false {
+                                    count += item["quantity"] as? Int ?? 0
+                                }
+                            }
+                        }
+                        items[index].count = count
+                    }
+                }
+                    
+            }
+            catch {
+                print(error)
+            }
+        }
+        
+        print(items)
+    }
     
   var body: some View {
     if family == .accessoryCircular {
@@ -128,6 +167,6 @@ struct ShoppingListWidget: Widget {
 #Preview(as: .systemSmall){
     ShoppingListWidget()
 } timeline: {
-    ShoppingListEntry(date: .now, count: 0, shoppingListStr:  "[]", method: .increment)
+    ShoppingListEntry(date: .now, shoppingListStr:  ShoppingListProvider.defaultDataString, method: .increment)
 }
 

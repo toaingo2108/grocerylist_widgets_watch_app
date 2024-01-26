@@ -356,6 +356,7 @@ class _ListPageState extends State<ListPage> {
   }
 
   getShoppingList() async {
+    await sendInitialData();
     try {
       var data = await _detailsList;
       Map<String, dynamic> shopDataList = json.decode(data);
@@ -383,6 +384,7 @@ class _ListPageState extends State<ListPage> {
   goToDetails() {
     Navigator.pushNamed(context, "/shopping_details").whenComplete(() {
       getShoppingList();
+      sendInitialData();
     });
   }
 

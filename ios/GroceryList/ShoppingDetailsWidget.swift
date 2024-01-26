@@ -11,11 +11,57 @@ import WidgetKit
 struct ShoppingDetailsProvider: AppIntentTimelineProvider {
     typealias Entry = ShoppingDetailsEntry
     typealias Intent = BackgroundIntent
+    static let defaultDetailStr = """
+      {
+           "My Shopping List": [
+             {
+               "category": "Vegetables",
+               "items": [
+                 {
+                   "name": "Basil",
+                   "isChecked": false,
+                   "quantity": 0,
+                   "iconName": "basil"
+                 },
+                 {
+                   "name": "Tomatoes",
+                   "isChecked": false,
+                   "quantity": 0,
+                   "iconName": "tomatoes"
+                 }
+               ]
+             },
+             {
+               "category": "Cereal & Breakfast Foods",
+               "items": [
+                 {
+                   "name": "Cheerios",
+                   "isChecked": false,
+                   "quantity": 0,
+                   "iconName": "cheerios"
+                 },
+                 {
+                   "name": "Corn Flakes",
+                   "isChecked": false,
+                   "quantity": 0,
+                   "iconName": "corn_flakes"
+                 },
+                 {
+                   "name": "Cream Of Wheat",
+                   "isChecked": false,
+                   "quantity": 0,
+                   "iconName": "cream_of_wheat"
+                 }
+               ]
+             }
+           ],
+        }
+"""
     
     func snapshot(for configuration: BackgroundIntent, in context: Context) async -> ShoppingDetailsEntry {
         let prefs = UserDefaults(suiteName: "group.jack.grocerylist.groceryList")
         // Load the current Count
-        let entry = ShoppingDetailsEntry(date: Date(), count: prefs?.integer(forKey: "counter") ?? 0, shoppingDetailsStr: prefs?.string(forKey: "list") ?? "[]", method: configuration.method)
+        let entry = ShoppingDetailsEntry(date: Date(), shop: prefs?.string(forKey: "shop") ?? "My Shopping List", shoppingDetailsStr: prefs?.string(forKey: "list") ?? ShoppingDetailsProvider.defaultDetailStr, method: configuration.method)
         
         return entry
     }
@@ -25,16 +71,16 @@ struct ShoppingDetailsProvider: AppIntentTimelineProvider {
         let timeline = Timeline(entries: [entry], policy: .atEnd)
         return timeline
     }
-    
+        
   func placeholder(in context: Context) -> ShoppingDetailsEntry {
-      ShoppingDetailsEntry(date: Date(), count: 0, shoppingDetailsStr: "[]", method: .increment)
+      ShoppingDetailsEntry(date: Date(), shop: "My Shopping List", shoppingDetailsStr: ShoppingDetailsProvider.defaultDetailStr, method: .increment)
   }
 
   func getSnapshot(in context: Context, completion: @escaping (ShoppingDetailsEntry) -> Void) {
     // Get the UserDefaults for the AppGroup
     let prefs = UserDefaults(suiteName: "group.jack.grocerylist.groceryList")
     // Load the current Count
-      let entry = ShoppingDetailsEntry(date: Date(), count: prefs?.integer(forKey: "counter") ?? 0, shoppingDetailsStr: prefs?.string(forKey: "list") ?? "[]", method: WidgetMethod(rawValue: prefs?.string(forKey: "method") ?? "increment") ?? .increment)
+      let entry = ShoppingDetailsEntry(date: Date(), shop: prefs?.string(forKey: "shop") ?? "My Shopping List", shoppingDetailsStr: prefs?.string(forKey: "list") ?? "[]", method: WidgetMethod(rawValue: prefs?.string(forKey: "method") ?? "increment") ?? .increment)
     completion(entry)
   }
 
@@ -48,7 +94,7 @@ struct ShoppingDetailsProvider: AppIntentTimelineProvider {
 
 struct ShoppingDetailsEntry: TimelineEntry {
     let date: Date
-    let count: Int
+    let shop: String
     let shoppingDetailsStr: String
     let method: WidgetMethod
 }
@@ -89,6 +135,7 @@ struct ShoppingDetailsViewEntryView: View {
 
         shoppingItems = items
     }
+    
   var body: some View {
     ForEach(shoppingItems.keys.sorted(), id: \.self) { key in
         Section(header: Text(key).font(.headline).foregroundColor(.yellow).padding(.top, 10).padding(.bottom, 5)) {
@@ -127,42 +174,7 @@ struct ShoppingDetailsViewEntryView: View {
                 }
             }
         }
-        
     
-//        VStack {
-//            Text("Shopping List").font(.caption2).frame(
-//                maxWidth: .infinity, alignment: .center)
-//            Spacer()
-//            HStack {
-//                Text(entry.count.description).font(.title).frame(maxWidth: .infinity, alignment: .center)
-//                Spacer()
-//                Text(entry.method.localizedStringResource.key).font(.title).frame(maxWidth: .infinity, alignment: .center)
-//            }
-//            Spacer()
-//            HStack {
-//                // This button is for clearing
-//                Button(intent: BackgroundIntent(method: .toggle) ) {
-//                    Image(systemName: "xmark").font(.system(size: 16)).foregroundColor(.red).frame(
-//                        width: 24, height: 24)
-//                }.buttonStyle(.plain).frame(alignment: .leading)
-//
-//                Spacer()
-//                Button(intent: BackgroundIntent(method: entry.method)) {
-//                    Image(systemName: "arrow.right").font(.system(size: 16)).foregroundColor(.white)
-//
-//                }.frame(width: 24, height: 24)
-//                    .background(.blue)
-//                    .cornerRadius(12).frame(alignment: .trailing)
-//                Spacer()
-//                // This button is for incrementing
-//                Button(intent: BackgroundIntent(method: .increment)) {
-//                    Image(systemName: "plus").font(.system(size: 16)).foregroundColor(.white)
-//
-//                }.frame(width: 24, height: 24)
-//                    .background(.blue)
-//                    .cornerRadius(12).frame(alignment: .trailing)
-//            }
-//        }
         }
     }
 }
@@ -181,28 +193,13 @@ struct ShoppingDetailsWidget: Widget {
       .configurationDisplayName("Grocery Details Widget")
       .description("Configure Grocery Details Widget Select Method")
       .supportedFamilies([.systemLarge, .systemExtraLarge])
-//    StaticConfiguration(kind: kind, provider: ShoppingDetailsProvider()) { entry in
-//      if #available(iOS 17.0, *) {
-//        ShoppingDetailsViewEntryView(entry: entry)
-//          .containerBackground(.fill.tertiary, for: .widget)
-//      } else {
-//        ShoppingDetailsViewEntryView(entry: entry)
-//          .padding()
-//          .background()
-//      }
-//    }
-//    .configurationDisplayName("Shipping List Widget")
-//    .description("Shopping List Items")
-//    .supportedFamilies([
-//      .systemSmall, .systemMedium, .systemLarge, .systemExtraLarge, .accessoryCircular,
-//    ])
   }
 }
 
 #Preview(as: .systemSmall){
     ShoppingDetailsWidget()
 } timeline: {
-    ShoppingDetailsEntry(date: .now, count: 0, shoppingDetailsStr:  "[]", method: .increment)
+    ShoppingDetailsEntry(date: .now, shop: "My Shopping List", shoppingDetailsStr:  ShoppingDetailsProvider.defaultDetailStr, method: .increment)
 }
 
 
