@@ -29,30 +29,41 @@ public struct BackgroundIntent: WidgetConfigurationIntent {
 
     @Parameter(title: "Method", default: WidgetMethod.increment)
     var method: WidgetMethod
+    
+    @Parameter(title: "Item" )
+    var item: String
 
   public init() {
       method = .increment
+      item = ""
   }
 
-   init(method: WidgetMethod) {
-    self.method = method
-  }
+    init(method: WidgetMethod, item: String) {
+        self.method = method
+        self.item = item
+    }
 
   public func perform() async throws -> some IntentResult {
-      print(method.localizedStringResource.key)
+      print(self.item)
       
       if method == .increment {
           await HomeWidgetBackgroundWorker.run(
-            url: URL(string: "groceryList://increment"),
+            url: URL(string: "groceryList://increment-\(item)"),
             appGroup: "group.jack.grocerylist.groceryList")
       }
       else {
           await HomeWidgetBackgroundWorker.run(
-            url: URL(string: "groceryList://toggle"),
+            url: URL(string: "groceryList://toggle-\(item)"),
             appGroup: "group.jack.grocerylist.groceryList")
       }
     return .result()
   }
+    
+    public static var parameterSummary: some ParameterSummary {
+        Summary {
+            \.$method
+        }
+    }
 }
 
 /// This is required if you want to have the widget be interactive even when the app is fully suspended.

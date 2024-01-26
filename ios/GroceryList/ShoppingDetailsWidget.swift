@@ -115,34 +115,42 @@ struct ShoppingDetailsViewEntryView: View {
     
     init(entry: ShoppingDetailsProvider.Entry) {
         self.entry = entry
-        entry.shoppingDetailsStr
         
-        var items: [String: [ShoppingItemDetails]] = [:]
-
-        items["Vegetables"] = [
-            ShoppingItemDetails(name: "Basil", isChecked: false, quantity: 1, icon: Image("basil")),
-//            ShoppingItemDetails(name: "Basil", isChecked: false, quantity: 1, icon: Image(uiImage: UIImage(contentsOfFile: data?.string(forKey: "basil") ?? "") ?? UIImage())),
-            ShoppingItemDetails(name: "Tomatoes", isChecked: true, quantity: 1, icon: Image("tomatoes"))
-        ]
-
-        items["Cereal & Breakfast Foods"] = [
-            ShoppingItemDetails(name: "Cheerios", isChecked: false, quantity: 1, icon: Image("cheerios")),
-            ShoppingItemDetails(name: "Corn Flakes", isChecked: false, quantity: 1, icon: Image( "corn_flakes")),
-            ShoppingItemDetails(name: "Cream Of Wheat", isChecked: true, quantity: 1, icon: Image( "cream_of_wheat"))
-        ]
-
-        // Add other categories and items as needed
-
-        shoppingItems = items
+        shoppingItems = [:]
+        print(entry)
+        if let jsonData = entry.shoppingDetailsStr.data(using: .utf8) {
+            do {
+                if let shoppingList = try JSONSerialization.jsonObject(with: jsonData, options: []) as? [String: Any] {
+                    let categories = shoppingList[entry.shop] as? [[String:Any]]
+                    for category in categories ?? [] {
+                        var categoryItem:[ShoppingItemDetails] = []
+                        let detailItems = category["items"] as? [[String:Any]]
+                        for item in detailItems ?? [] {
+                            categoryItem.append(ShoppingItemDetails(name: item["name"] as? String ?? "",isChecked: item["isChecked"] as? Bool ?? false, quantity: item["quantity"] as? Int ?? 0,icon: Image(item["iconName"] as? String ?? "") ))
+                        }
+                        shoppingItems[category["category"] as? String ?? ""] = categoryItem
+                    }
+                
+                }
+                    
+            }
+            catch {
+                print(error)
+            }
+        }
     }
     
   var body: some View {
-    ForEach(shoppingItems.keys.sorted(), id: \.self) { key in
+      ForEach(shoppingItems.keys.sorted {
+          if $0 == "Vegetables" { return true }
+          if $1 == "Vegetables" { return false }
+          return $0 < $1
+      }, id: \.self) { key in
         Section(header: Text(key).font(.headline).foregroundColor(.yellow).padding(.top, 10).padding(.bottom, 5)) {
             ForEach(shoppingItems[key]!) { item in
-                Button (intent: BackgroundIntent(method: entry.method)) {
+                Button (intent: BackgroundIntent(method: entry.method, item: item.name)) {
                     HStack {
-                        Button(intent: BackgroundIntent(method: .toggle)) {
+                        Button(intent: BackgroundIntent(method: .toggle, item: item.name)) {
                             Image(systemName: item.isChecked ? "checkmark.square" : "square")
                                 .foregroundColor(item.isChecked ? .green : .gray)
                         }.buttonStyle(BorderlessButtonStyle()).padding(.trailing, 8)

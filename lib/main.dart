@@ -17,12 +17,13 @@ Future<void> interactiveCallback(Uri? uri) async {
   // Set AppGroup Id. This is needed for iOS Apps to talk to their WidgetExtensions
   await HomeWidget.setAppGroupId('group.jack.grocerylist.groceryList');
 
+  print(uri?.host);
   // We check the host of the uri to determine which action should be triggered.
   List<String>? messages = uri?.host.split("-");
   if (messages?[0] == 'increment') {
     await _increment(messages?[1] ?? "");
   } else if (uri?.host == 'toggle') {
-    await _clear();
+    await _toggle(messages?[1] ?? "");
   }
 }
 
