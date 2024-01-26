@@ -30,6 +30,7 @@
 		FC040D962B62AA0B005FA555 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FC040D952B62AA0B005FA555 /* Assets.xcassets */; };
 		FC040D992B62AA0B005FA555 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FC040D982B62AA0B005FA555 /* Preview Assets.xcassets */; };
 		FC040D9C2B62AA0B005FA555 /* GroceryList Watch App.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = FC040D8F2B62AA09005FA555 /* GroceryList Watch App.app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		FC509DA12B6319710041B484 /* ShoppingDetailsWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC509DA02B6319710041B484 /* ShoppingDetailsWidget.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -134,6 +135,7 @@
 		FC040D952B62AA0B005FA555 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		FC040D982B62AA0B005FA555 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		FC040DA12B62AD97005FA555 /* GroceryListExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = GroceryListExtension.entitlements; sourceTree = "<group>"; };
+		FC509DA02B6319710041B484 /* ShoppingDetailsWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShoppingDetailsWidget.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -268,6 +270,7 @@
 			children = (
 				FC040D642B6208E6005FA555 /* GroceryListBundle.swift */,
 				FC040D7F2B62A58B005FA555 /* ShoppingListWidget.swift */,
+				FC509DA02B6319710041B484 /* ShoppingDetailsWidget.swift */,
 				FC040D6C2B6208E7005FA555 /* Assets.xcassets */,
 				FC040D6E2B6208E7005FA555 /* Info.plist */,
 			);
@@ -602,6 +605,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FC509DA12B6319710041B484 /* ShoppingDetailsWidget.swift in Sources */,
 				FC040D802B62A58B005FA555 /* ShoppingListWidget.swift in Sources */,
 				FC040D782B62095F005FA555 /* BackgroundIntent.swift in Sources */,
 				FC040D652B6208E6005FA555 /* GroceryListBundle.swift in Sources */,

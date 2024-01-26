@@ -7,15 +7,13 @@
 
 import SwiftUI
 import WidgetKit
+import AppIntents
 
-struct ShoppingListProvider: AppIntentTimelineProvider {
-    typealias Entry = ShoppingListEntry
-    typealias Intent = BackgroundIntent
-    
+struct ShoppingListProvider: TimelineProvider {
     func snapshot(for configuration: BackgroundIntent, in context: Context) async -> ShoppingListEntry {
         let prefs = UserDefaults(suiteName: "group.jack.grocerylist.groceryList")
         // Load the current Count
-        let entry = ShoppingListEntry(date: Date(), count: prefs?.integer(forKey: "counter") ?? 0, page: prefs?.integer(forKey: "page") ?? 0, method: configuration.method)
+        let entry = ShoppingListEntry(date: Date(), count: prefs?.integer(forKey: "counter") ?? 0, shoppingListStr: prefs?.string(forKey: "list") ?? "[]", method: configuration.method)
         
         return entry
     }
@@ -27,14 +25,14 @@ struct ShoppingListProvider: AppIntentTimelineProvider {
     }
     
   func placeholder(in context: Context) -> ShoppingListEntry {
-      ShoppingListEntry(date: Date(), count: 0, page: 0, method: .increment)
+      ShoppingListEntry(date: Date(), count: 0, shoppingListStr: "[]", method: .increment)
   }
 
   func getSnapshot(in context: Context, completion: @escaping (ShoppingListEntry) -> Void) {
     // Get the UserDefaults for the AppGroup
     let prefs = UserDefaults(suiteName: "group.jack.grocerylist.groceryList")
     // Load the current Count
-      let entry = ShoppingListEntry(date: Date(), count: prefs?.integer(forKey: "counter") ?? 0, page: prefs?.integer(forKey: "page") ?? 0, method: WidgetMethod(rawValue: prefs?.string(forKey: "method") ?? "increment") ?? .increment)
+      let entry = ShoppingListEntry(date: Date(), count: prefs?.integer(forKey: "counter") ?? 0, shoppingListStr: prefs?.string(forKey: "list") ?? "[]", method: WidgetMethod(rawValue: prefs?.string(forKey: "method") ?? "increment") ?? .increment)
     completion(entry)
   }
 
@@ -49,16 +47,39 @@ struct ShoppingListProvider: AppIntentTimelineProvider {
 struct ShoppingListEntry: TimelineEntry {
     let date: Date
     let count: Int
-    let page: Int
+    let shoppingListStr: String
     let method: WidgetMethod
+}
+
+struct ShoppingItem: Identifiable {
+    let id = UUID()
+    let color: Color
+    let title: String
+    let count: Int
+    
+    // Computed property to get the initials for the icon
+    var initials: String {
+        return title.components(separatedBy: " ")
+            .reduce("") { ($0 == "" ? "" : "\($0.first!)") + "\($1.first!)" }
+    }
+    
+    // Computed property to determine the number of dots to display
+    var countIndicator: Int {
+        min(count, 3) // For example, display up to 3 dots
+    }
 }
 
 struct ShoppingListViewEntryView: View {
   var entry: ShoppingListProvider.Entry
-//    var intent: ShoppingListProvider.Intent
 
   @Environment(\.widgetFamily) var family
 
+    let items: [ShoppingItem] = [
+        ShoppingItem(color: .yellow, title: "My Shopping List", count: 7),
+        ShoppingItem(color: .orange, title: "Walmart", count: 10),
+        ShoppingItem(color: .blue, title: "Kroger", count: 7)
+    ]
+    
   var body: some View {
     if family == .accessoryCircular {
       Image(
@@ -69,75 +90,44 @@ struct ShoppingListViewEntryView: View {
         .frame(width: 76, height: 76)
         .scaledToFill()
     } else {
-        VStack {
-            Text("Shopping List").font(.caption2).frame(
-                maxWidth: .infinity, alignment: .center)
-            Spacer()
+        ForEach(items) { item in
             HStack {
-                Text(entry.count.description).font(.title).frame(maxWidth: .infinity, alignment: .center)
-                Spacer()
-                Text(entry.method.localizedStringResource.key).font(.title).frame(maxWidth: .infinity, alignment: .center)
-            }
-            Spacer()
-            HStack {
-                // This button is for clearing
-                Button(intent: BackgroundIntent(method: .toggle) ) {
-                    Image(systemName: "xmark").font(.system(size: 16)).foregroundColor(.red).frame(
-                        width: 24, height: 24)
-                }.buttonStyle(.plain).frame(alignment: .leading)
+                Circle()
+                    .fill(item.color)
+                    .frame(width: 40, height: 40)
+                    .overlay(Text(item.initials).foregroundColor(.white))
+                
+                Text(item.title)
+                    .padding(.leading, 8).foregroundColor(.white)
                 
                 Spacer()
-                Button(intent: BackgroundIntent(method: entry.method)) {
-                    Image(systemName: "arrow.right").font(.system(size: 16)).foregroundColor(.white)
-                    
-                }.frame(width: 24, height: 24)
-                    .background(.blue)
-                    .cornerRadius(12).frame(alignment: .trailing)
-                Spacer()
-                // This button is for incrementing
-                Button(intent: BackgroundIntent(method: .increment)) {
-                    Image(systemName: "plus").font(.system(size: 16)).foregroundColor(.white)
-                    
-                }.frame(width: 24, height: 24)
-                    .background(.blue)
-                    .cornerRadius(12).frame(alignment: .trailing)
+                
+                Text("\(item.count)").foregroundStyle(.white)
             }
         }
     }
-  }
+    }
 }
+
 
 struct ShoppingListWidget: Widget {
   let kind: String = "ShoppingListWidget"
 
   var body: some WidgetConfiguration {
-      AppIntentConfiguration(kind: kind, intent: BackgroundIntent.self, provider: ShoppingListProvider()) {
-          ShoppingListViewEntryView(entry: $0)
+      StaticConfiguration(kind: kind, provider: ShoppingListProvider()) {
+          ShoppingListViewEntryView(entry: $0).containerBackground(for: .widget) {
+              Color(red: 36/255.0, green: 37/255.0, blue: 42/255.0)
+          }
       }
       .configurationDisplayName("Grocery List Widget")
       .description("Configure Grocery List Widget Select Method")
-      .supportedFamilies([.systemSmall])
-//    StaticConfiguration(kind: kind, provider: ShoppingListProvider()) { entry in
-//      if #available(iOS 17.0, *) {
-//        ShoppingListViewEntryView(entry: entry)
-//          .containerBackground(.fill.tertiary, for: .widget)
-//      } else {
-//        ShoppingListViewEntryView(entry: entry)
-//          .padding()
-//          .background()
-//      }
-//    }
-    .configurationDisplayName("Shipping List Widget")
-    .description("Shopping List Items")
-    .supportedFamilies([
-      .systemSmall, .systemMedium, .systemLarge, .systemExtraLarge, .accessoryCircular,
-    ])
+      .supportedFamilies([.systemSmall, .systemMedium])
   }
 }
 
 #Preview(as: .systemSmall){
     ShoppingListWidget()
 } timeline: {
-    ShoppingListEntry(date: .now, count: 0, page: 0, method: .increment)
+    ShoppingListEntry(date: .now, count: 0, shoppingListStr:  "[]", method: .increment)
 }
 

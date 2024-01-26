@@ -12,7 +12,6 @@ import SwiftUI
 struct GroceryListBundle: WidgetBundle {
     var body: some Widget {
         ShoppingListWidget()
-//        GroceryList()
-//        GroceryListLiveActivity()
+        ShoppingDetailsWidget()
     }
 }
