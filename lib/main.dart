@@ -184,14 +184,44 @@ Future<String> _increment(String itemName) async {
     Map<String, dynamic> shopList = json.decode(oldValue);
     List<dynamic> detailsList = shopList[shopValue];
     for (var element in detailsList) {
-      if (element["name"] == itemName) {
-        element["quantity"] = element["quantity"] + 1;
+      for (var item in element["items"]) {
+        if (item["name"] == itemName) {
+          item["quantity"] = item["quantity"] + 1;
+        }
       }
     }
 
     newValue = json.encode(shopList);
     await _sendAndUpdateDetails(newValue);
+
+    print(shopList);
     print('increase number');
+  } catch (error) {
+    print(error);
+  }
+  return newValue;
+}
+
+Future<String> _toggle(String itemName) async {
+  String newValue = "";
+  try {
+    final oldValue = await _detailsList;
+    final shopValue = await _shop;
+    Map<String, dynamic> shopList = json.decode(oldValue);
+    List<dynamic> detailsList = shopList[shopValue];
+    for (var element in detailsList) {
+      for (var item in element["items"]) {
+        if (item["name"] == itemName) {
+          item["isChecked"] = !item["isChecked"];
+        }
+      }
+    }
+
+    newValue = json.encode(shopList);
+    await _sendAndUpdateDetails(newValue);
+
+    print(newValue);
+    print('toggle');
   } catch (error) {
     print(error);
   }
@@ -295,7 +325,7 @@ class MyApp extends StatelessWidget {
         initialRoute: '/shopping_list',
         routes: {
           '/shopping_list': (context) => const ListPage(),
-          '/shopping_details': (context) => ShoppingDetailsPage(),
+          '/shopping_details': (context) => const ShoppingDetailsPage(),
         });
   }
 }
@@ -332,17 +362,28 @@ class _ListPageState extends State<ListPage> {
 
       for (var shop in shopList) {
         var count = 0;
-        var items = shopDataList[shop["title"]]["items"];
-        for (var item in items) {
-          if (item["isChecked"]) {
-            count += (item["quantity"] as int);
+        var detailsList = shopDataList[shop["title"]];
+        for (var element in detailsList) {
+          for (var item in element["items"]) {
+            if (item["isChecked"]) {
+              count += (item["quantity"] as int);
+            }
           }
         }
         shop["count"] = count;
       }
+
+      print(shopList);
+      setState(() {});
     } catch (error) {
       print(error);
     }
+  }
+
+  goToDetails() {
+    Navigator.pushNamed(context, "/shopping_details").whenComplete(() {
+      getShoppingList();
+    });
   }
 
   Widget getShoppingListWidget() {
@@ -351,7 +392,10 @@ class _ListPageState extends State<ListPage> {
       array.add(Padding(
           padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 20),
           child: InkWell(
-            onTap: () {},
+            onTap: () async {
+              await _sendAndUpdateShop("${shop["title"]}");
+              goToDetails();
+            },
             child: ListTile(
               leading: CircleAvatar(
                 backgroundColor: (shop["color"] ?? Colors.yellow) as Color,
@@ -401,8 +445,159 @@ class ShoppingDetailsPage extends StatefulWidget {
 }
 
 class _ShoppingDetailsPageState extends State<ShoppingDetailsPage> {
+  List<dynamic> detailsList = [];
+  String shop = "";
+
+  @override
+  void initState() {
+    super.initState();
+
+    getShoppingDetails();
+  }
+
+  getShoppingDetails() async {
+    try {
+      var data = await _detailsList;
+      shop = await _shop;
+      Map<String, dynamic> shopDataList = json.decode(data);
+
+      detailsList = shopDataList[shop];
+
+      setState(() {});
+    } catch (error) {
+      print(error);
+    }
+  }
+
+  onToggleItem(item) async {
+    print("toggle");
+    await _toggle("$item");
+
+    await getShoppingDetails();
+  }
+
+  onIncreaseItem(item) async {
+    await _increment("$item");
+
+    await getShoppingDetails();
+  }
+
+  getShoppingDetailsWidget() {
+    List<Widget> array = [];
+
+    for (var details in detailsList) {
+      array.add(CategorySection(
+        categoryData: details,
+        onToggleItem: onToggleItem,
+        onIncreaseItem: onIncreaseItem,
+      ));
+    }
+    return ListView(children: array);
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(body: const Placeholder());
+    return Scaffold(
+      backgroundColor: const Color(0xff24252a),
+      appBar: AppBar(
+        title: Text(
+          shop,
+          style: const TextStyle(color: Colors.white),
+        ),
+        backgroundColor: const Color(0xff24252a),
+        iconTheme: const IconThemeData(color: Colors.white),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.only(top: 20),
+        child: getShoppingDetailsWidget(),
+      ),
+    );
+  }
+}
+
+class CategorySection extends StatelessWidget {
+  final dynamic categoryData;
+  final Function onToggleItem;
+  final Function onIncreaseItem;
+
+  const CategorySection({
+    super.key,
+    required this.categoryData,
+    required this.onToggleItem,
+    required this.onIncreaseItem,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: <Widget>[
+          Padding(
+            padding:
+                const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+            child: Text(
+              "${categoryData["category"]}",
+              style: const TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 18.0,
+                color: Colors.amber,
+              ),
+            ),
+          ),
+          ...(categoryData["items"] as List<dynamic>).map((item) => InkWell(
+                onTap: () {
+                  onIncreaseItem(item["name"]);
+                },
+                child: ListTile(
+                  title: Row(
+                    children: [
+                      Image.asset(
+                        "assets/images/${item["iconName"]}.png",
+                        width: 20,
+                        height: 20,
+                      ),
+                      const SizedBox(width: 14),
+                      Text(
+                        "${item["name"]}",
+                        style: const TextStyle(color: Colors.white),
+                      ),
+                    ],
+                  ),
+                  trailing: Container(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 12.0, vertical: 6.0),
+                    decoration: BoxDecoration(
+                      color: Colors.blueGrey,
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: Text(
+                      '${item["quantity"]}',
+                      style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16.0,
+                      ),
+                    ),
+                  ),
+                  leading: Checkbox(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(2.0),
+                    ),
+                    side: MaterialStateBorderSide.resolveWith(
+                      (states) =>
+                          const BorderSide(width: 1.0, color: Colors.white),
+                    ),
+                    value: item["isChecked"],
+                    activeColor: Colors.transparent,
+                    onChanged: (bool? newValue) {
+                      onToggleItem(item["name"]);
+                    },
+                  ),
+                ),
+              )),
+        ],
+      ),
+    );
   }
 }
