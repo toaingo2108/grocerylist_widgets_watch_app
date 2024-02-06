@@ -26,11 +26,12 @@
 		FC040D782B62095F005FA555 /* BackgroundIntent.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC040D562B6203E8005FA555 /* BackgroundIntent.swift */; };
 		FC040D802B62A58B005FA555 /* ShoppingListWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC040D7F2B62A58B005FA555 /* ShoppingListWidget.swift */; };
 		FC040D922B62AA09005FA555 /* GroceryListApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC040D912B62AA09005FA555 /* GroceryListApp.swift */; };
-		FC040D942B62AA09005FA555 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC040D932B62AA09005FA555 /* ContentView.swift */; };
+		FC040D942B62AA09005FA555 /* ShoppingListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC040D932B62AA09005FA555 /* ShoppingListView.swift */; };
 		FC040D962B62AA0B005FA555 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FC040D952B62AA0B005FA555 /* Assets.xcassets */; };
 		FC040D992B62AA0B005FA555 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FC040D982B62AA0B005FA555 /* Preview Assets.xcassets */; };
 		FC040D9C2B62AA0B005FA555 /* GroceryList Watch App.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = FC040D8F2B62AA09005FA555 /* GroceryList Watch App.app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		FC509DA12B6319710041B484 /* ShoppingDetailsWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC509DA02B6319710041B484 /* ShoppingDetailsWidget.swift */; };
+		FC85009E2B70753E009BB6BE /* ShoppingDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC85009D2B70753E009BB6BE /* ShoppingDetailsView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -131,11 +132,12 @@
 		FC040D7F2B62A58B005FA555 /* ShoppingListWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShoppingListWidget.swift; sourceTree = "<group>"; };
 		FC040D8F2B62AA09005FA555 /* GroceryList Watch App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "GroceryList Watch App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		FC040D912B62AA09005FA555 /* GroceryListApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroceryListApp.swift; sourceTree = "<group>"; };
-		FC040D932B62AA09005FA555 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		FC040D932B62AA09005FA555 /* ShoppingListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShoppingListView.swift; sourceTree = "<group>"; };
 		FC040D952B62AA0B005FA555 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		FC040D982B62AA0B005FA555 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		FC040DA12B62AD97005FA555 /* GroceryListExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = GroceryListExtension.entitlements; sourceTree = "<group>"; };
 		FC509DA02B6319710041B484 /* ShoppingDetailsWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShoppingDetailsWidget.swift; sourceTree = "<group>"; };
+		FC85009D2B70753E009BB6BE /* ShoppingDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShoppingDetailsView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -281,7 +283,8 @@
 			isa = PBXGroup;
 			children = (
 				FC040D912B62AA09005FA555 /* GroceryListApp.swift */,
-				FC040D932B62AA09005FA555 /* ContentView.swift */,
+				FC040D932B62AA09005FA555 /* ShoppingListView.swift */,
+				FC85009D2B70753E009BB6BE /* ShoppingDetailsView.swift */,
 				FC040D952B62AA0B005FA555 /* Assets.xcassets */,
 				FC040D972B62AA0B005FA555 /* Preview Content */,
 			);
@@ -616,7 +619,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				FC040D942B62AA09005FA555 /* ContentView.swift in Sources */,
+				FC040D942B62AA09005FA555 /* ShoppingListView.swift in Sources */,
+				FC85009E2B70753E009BB6BE /* ShoppingDetailsView.swift in Sources */,
 				FC040D922B62AA09005FA555 /* GroceryListApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
