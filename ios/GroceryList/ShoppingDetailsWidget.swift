@@ -86,7 +86,13 @@ struct ShoppingDetailsProvider: AppIntentTimelineProvider {
 
   func getTimeline(in context: Context, completion: @escaping (Timeline<Entry>) -> Void) {
     getSnapshot(in: context) { (entry) in
-      let timeline = Timeline(entries: [entry], policy: .atEnd)
+//      let timeline = Timeline(entries: [entry], policy: .atEnd)
+        
+        let currentDate = Date()
+        let reloadDate = Calendar.current.date(byAdding: .minute,
+                                                   value: 1,
+                                                   to: currentDate)!
+      let timeline = Timeline(entries: [entry], policy: .after(reloadDate))
       completion(timeline)
     }
   }

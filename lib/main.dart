@@ -21,9 +21,9 @@ Future<void> interactiveCallback(Uri? uri) async {
   // We check the host of the uri to determine which action should be triggered.
   List<String>? messages = uri?.host.split("-");
   if (messages?[0] == 'increment') {
-    await _increment(messages?[1] ?? "");
-  } else if (uri?.host == 'toggle') {
-    await _toggle(messages?[1] ?? "");
+    await _increment(Uri.decodeFull(messages?[1] ?? ""));
+  } else if (messages?[0] == 'toggle') {
+    await _toggle(Uri.decodeFull(messages?[1] ?? ""));
   }
 }
 
@@ -184,12 +184,20 @@ Future<String> _increment(String itemName) async {
     final shopValue = await _shop;
     Map<String, dynamic> shopList = json.decode(oldValue);
     List<dynamic> detailsList = shopList[shopValue];
+
+    bool success = false;
     for (var element in detailsList) {
       for (var item in element["items"]) {
-        if (item["name"] == itemName) {
+        if (item["name"].toLowerCase() == itemName.toLowerCase()) {
           item["quantity"] = item["quantity"] + 1;
+          success = true;
+          break;
         }
       }
+    }
+
+    if (!success) {
+      detailsList.add({"category": itemName, "items": []});
     }
 
     newValue = json.encode(shopList);
@@ -212,7 +220,7 @@ Future<String> _toggle(String itemName) async {
     List<dynamic> detailsList = shopList[shopValue];
     for (var element in detailsList) {
       for (var item in element["items"]) {
-        if (item["name"] == itemName) {
+        if (item["name"].toLowerCase() == itemName.toLowerCase()) {
           item["isChecked"] = !item["isChecked"];
         }
       }

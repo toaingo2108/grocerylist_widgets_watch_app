@@ -47,13 +47,14 @@ public struct BackgroundIntent: WidgetConfigurationIntent {
       print(self.item)
       
       if method == .increment {
+          print("groceryList://increment-\(item)")
           await HomeWidgetBackgroundWorker.run(
-            url: URL(string: "groceryList://increment-\(item)"),
+            url: URL(string: "groceryList://increment-\(item.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? "")"),
             appGroup: "group.jack.grocerylist.groceryList")
       }
       else {
           await HomeWidgetBackgroundWorker.run(
-            url: URL(string: "groceryList://toggle-\(item)"),
+            url: URL(string: "groceryList://toggle-\(item.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? "")"),
             appGroup: "group.jack.grocerylist.groceryList")
       }
     return .result()
