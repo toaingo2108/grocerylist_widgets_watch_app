@@ -147,12 +147,13 @@ struct ShoppingDetailsViewEntryView: View {
     }
     
   var body: some View {
+      Text(entry.shop).font(.title3).foregroundColor(.white)
       ForEach(shoppingItems.keys.sorted {
           if $0 == "Vegetables" { return true }
           if $1 == "Vegetables" { return false }
           return $0 < $1
       }, id: \.self) { key in
-        Section(header: Text(key).font(.headline).foregroundColor(.yellow).padding(.top, 10).padding(.bottom, 5)) {
+        Section(header: Text(key).font(.headline).foregroundColor(.yellow).padding(.top, 1).padding(.bottom, 5)) {
             ForEach(shoppingItems[key]!) { item in
                 Button (intent: BackgroundIntent(method: entry.method, item: item.name)) {
                     HStack {
@@ -203,6 +204,7 @@ struct ShoppingDetailsWidget: Widget {
               .containerBackground(for: .widget) {
               Color(red: 36/255.0, green: 37/255.0, blue: 42/255.0)
           }
+              .widgetURL(URL(string: "groceryList://message?message=widget-clicked&homeWidget"))
       }
       .configurationDisplayName("Grocery Details Widget")
       .description("Configure Grocery Details Widget Select Method")

@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:home_widget/home_widget.dart';
 
@@ -39,13 +40,15 @@ const defaultDataStr = '''
           "name": "Basil",
           "isChecked": false,
           "quantity": 0,
-          "iconName": "basil"
+          "iconName": "basil",
+          "image":"https://firebasestorage.googleapis.com/v0/b/developmentdashboard-4777e.appspot.com/o/basil.png?alt=media&token=520b78e9-3734-4f56-82ab-2c17cf418587"
         },
         {
           "name": "Tomatoes",
           "isChecked": false,
           "quantity": 0,
-          "iconName": "tomatoes"
+          "iconName": "tomatoes",
+          "image":"https://firebasestorage.googleapis.com/v0/b/developmentdashboard-4777e.appspot.com/o/tomatoes.png?alt=media&token=bac5839a-2e91-4272-8bd2-a10b9ad6b8a4"
         }
       ]
     },
@@ -56,19 +59,22 @@ const defaultDataStr = '''
           "name": "Cheerios",
           "isChecked": false,
           "quantity": 0,
-          "iconName": "cheerios"
+          "iconName": "cheerios",
+          "image": "https://firebasestorage.googleapis.com/v0/b/developmentdashboard-4777e.appspot.com/o/cheerios.png?alt=media&token=c68b7bb6-0039-492f-ab52-bf5e111c7692"
         },
         {
           "name": "Corn Flakes",
           "isChecked": false,
           "quantity": 0,
-          "iconName": "corn_flakes"
+          "iconName": "corn_flakes",
+          "image": "https://firebasestorage.googleapis.com/v0/b/developmentdashboard-4777e.appspot.com/o/corn_flakes.png?alt=media&token=0e93c920-93ef-49ea-b38f-52cd81ec5f14"
         },
         {
           "name": "Cream Of Wheat",
           "isChecked": false,
           "quantity": 0,
-          "iconName": "cream_of_wheat"
+          "iconName": "cream_of_wheat",
+          "image": "https://firebasestorage.googleapis.com/v0/b/developmentdashboard-4777e.appspot.com/o/cream_of_wheat.png?alt=media&token=c884f837-1cb6-462f-8879-c805a8723835"
         }
       ]
     }
@@ -81,13 +87,15 @@ const defaultDataStr = '''
           "name": "Basil",
           "isChecked": false,
           "quantity": 0,
-          "iconName": "basil"
+          "iconName": "basil",
+          "image":"https://firebasestorage.googleapis.com/v0/b/developmentdashboard-4777e.appspot.com/o/basil.png?alt=media&token=520b78e9-3734-4f56-82ab-2c17cf418587"
         },
         {
           "name": "Tomatoes",
           "isChecked": false,
           "quantity": 0,
-          "iconName": "tomatoes"
+          "iconName": "tomatoes",
+          "image":"https://firebasestorage.googleapis.com/v0/b/developmentdashboard-4777e.appspot.com/o/tomatoes.png?alt=media&token=bac5839a-2e91-4272-8bd2-a10b9ad6b8a4"
         }
       ]
     },
@@ -98,19 +106,22 @@ const defaultDataStr = '''
           "name": "Cheerios",
           "isChecked": false,
           "quantity": 0,
-          "iconName": "cheerios"
+          "iconName": "cheerios",
+          "image": "https://firebasestorage.googleapis.com/v0/b/developmentdashboard-4777e.appspot.com/o/cheerios.png?alt=media&token=c68b7bb6-0039-492f-ab52-bf5e111c7692"
         },
         {
           "name": "Corn Flakes",
           "isChecked": false,
           "quantity": 0,
-          "iconName": "corn_flakes"
+          "iconName": "corn_flakes",
+          "image": "https://firebasestorage.googleapis.com/v0/b/developmentdashboard-4777e.appspot.com/o/corn_flakes.png?alt=media&token=0e93c920-93ef-49ea-b38f-52cd81ec5f14"
         },
         {
           "name": "Cream Of Wheat",
           "isChecked": false,
           "quantity": 0,
-          "iconName": "cream_of_wheat"
+          "iconName": "cream_of_wheat",
+          "image": "https://firebasestorage.googleapis.com/v0/b/developmentdashboard-4777e.appspot.com/o/cream_of_wheat.png?alt=media&token=c884f837-1cb6-462f-8879-c805a8723835"
         }
       ]
     }
@@ -123,13 +134,15 @@ const defaultDataStr = '''
           "name": "Basil",
           "isChecked": false,
           "quantity": 0,
-          "iconName": "basil"
+          "iconName": "basil",
+          "image": "https://firebasestorage.googleapis.com/v0/b/developmentdashboard-4777e.appspot.com/o/basil.png?alt=media&token=520b78e9-3734-4f56-82ab-2c17cf418587"
         },
         {
           "name": "Tomatoes",
           "isChecked": false,
           "quantity": 0,
-          "iconName": "tomatoes"
+          "iconName": "tomatoes",
+          "image": "https://firebasestorage.googleapis.com/v0/b/developmentdashboard-4777e.appspot.com/o/tomatoes.png?alt=media&token=bac5839a-2e91-4272-8bd2-a10b9ad6b8a4"
         }
       ]
     },
@@ -140,19 +153,22 @@ const defaultDataStr = '''
           "name": "Cheerios",
           "isChecked": false,
           "quantity": 0,
-          "iconName": "cheerios"
+          "iconName": "cheerios",
+          "image": "https://firebasestorage.googleapis.com/v0/b/developmentdashboard-4777e.appspot.com/o/cheerios.png?alt=media&token=c68b7bb6-0039-492f-ab52-bf5e111c7692"
         },
         {
           "name": "Corn Flakes",
           "isChecked": false,
           "quantity": 0,
-          "iconName": "corn_flakes"
+          "iconName": "corn_flakes",
+          "image": "https://firebasestorage.googleapis.com/v0/b/developmentdashboard-4777e.appspot.com/o/corn_flakes.png?alt=media&token=0e93c920-93ef-49ea-b38f-52cd81ec5f14"
         },
         {
           "name": "Cream Of Wheat",
           "isChecked": false,
           "quantity": 0,
-          "iconName": "cream_of_wheat"
+          "iconName": "cream_of_wheat",
+          "image": "https://firebasestorage.googleapis.com/v0/b/developmentdashboard-4777e.appspot.com/o/cream_of_wheat.png?alt=media&token=c884f837-1cb6-462f-8879-c805a8723835"
         }
       ]
     }
@@ -364,6 +380,26 @@ class _ListPageState extends State<ListPage> {
     getShoppingList();
   }
 
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _checkForWidgetLaunch();
+    HomeWidget.widgetClicked.listen(_launchedFromWidget);
+  }
+
+  void _checkForWidgetLaunch() {
+    HomeWidget.initiallyLaunchedFromHomeWidget().then(_launchedFromWidget);
+  }
+
+  void _launchedFromWidget(Uri? uri) {
+    if (uri != null) {
+      Navigator.pushNamed(context, "/shopping_details").whenComplete(() {
+        getShoppingList();
+        sendInitialData();
+      });
+    }
+  }
+
   getShoppingList() async {
     await sendInitialData();
     try {
@@ -383,10 +419,11 @@ class _ListPageState extends State<ListPage> {
         shop["count"] = count;
       }
 
-      print(shopList);
       setState(() {});
     } catch (error) {
-      print(error);
+      if (kDebugMode) {
+        print(error);
+      }
     }
   }
 
